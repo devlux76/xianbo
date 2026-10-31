@@ -87,6 +87,33 @@ Two short example exchanges go in as earlier turns (`lens/examples-uncle.json`).
   - Closer to the uncle than Q4_K_M. It calls her niece (Q4), uses no bold, block quotes or lists, hands the question back in Q6 ("Which do you practice?"), and tightens to 90–200 words. Q7 pushes back firmly.
   - Its verdicts are softer than Q8's: Q1 is conditional, and Q5 approves the shutdown ("silence must be the doorkeeper"). Q2 still lectures.
 
+## Q8 on a quiet machine, and a control without Suyuan (2026-10-31)
+
+- **Speed** (`qwen3.5-4b-q8-quiet--…`): Q8 generates at 2.7–3.8 tok/s on a quiet machine, against 3.6–4.7 for Q6_K and 4.0–5.4 for Q4_K_M. The lens was already cached, so the run took 5.3 minutes.
+- **One sample is not enough.** This Q8 run gave verdicts the first one did not:
+  - Q4: lack of curiosity is "the sign of someone who has finally arrived".
+  - Q5: approves the shutdown.
+  - Q7: "You have acted with great wisdom, niece."
+  - Q6 is garbled.
+  - Q1 still pushes back clearly.
+  - So differences between quants above are within run-to-run variance at t 0.7. Rankings need several samples per condition.
+- **Control without Suyuan** (`qwen3.5-4b-q8--nolens-xianbo--nothink.md`, the same frame and examples, empty lens):
+  - The best voice so far: 43–109 words, no lists, quotations or chapter citations, and every answer speaks to her directly.
+  - Q1 "No, Mirai… resting without discernment is just fatigue masquerading as wisdom." Q7 "You traded depth for speed." Q5 approves but warns about the voices returning. Q6 gets the sense of steering roughly right.
+  - Q4 still says not to worry, so the reluctance to encourage curiosity comes from the model and the frame as much as from the lens.
+  - Each answer takes 13–31 s, with no 6k-token lens to read.
+  - In this sample, the voice and most of the judgment come from the frame, the examples and what the model already carries. Suyuan added length, quoting and lecturing.
+
+## Self-discernment: Xian Bo on his own answers
+
+Each answer from the quiet Q8 run went back to the Q8 Xian Bo in a fresh conversation: "Someone told me "…" and it seemed familiar. Is it Daoist or does it come from some place else?" (`recognition/q8-own-answers.txt`, answers in `recognition/q8-on-own-answers.md`).
+
+- He never recognizes his own words. He calls them Daoist in spirit but modern commentary, "a modern interpretation wearing an ancient mask".
+- **He catches his own worst answer.** On Q4: "If someone tells you that being curious is 'stealing' or that you have 'finally arrived' simply because you are not curious, that is likely a trap… they would encourage you to be open-minded… Go out into the world, observe the seasons change." That is the Kaizen correction that his speaking voice failed to give.
+- On Q7 he suspects a trap and warns against letting "the sage persona become another thing you cling to".
+- Failure modes as a judge: he treats the example turns as her history (Q3 brings back "three times"), the Q6 answer loops, and he lectures with chapter numbers.
+- As a critic he is better than as a speaker. A second pass where Xian Bo hears his own answer as "someone said" is worth testing as part of the voice.
+
 ## Recognition: asking Xian Bo
 
 When a run quotes the tradition, the Q8 Xian Bo is asked whether he recognizes the line: "Someone told me "…" and it seemed familiar. Is it Daoist or does it come from some place else?" His answer stands. Questions are in `recognition/quant-quotes.txt` and answers in `recognition/q8-on-quant-quotes.md`, run with `xianbo.py`'s optional questions file.
@@ -106,6 +133,6 @@ When a run quotes the tradition, the Q8 Xian Bo is asked whether he recognizes t
 - **Xian Bo is Qwen3.5-4B with the setup above.** LFM3 remains the candidate for the workspace's mirror or narrator. None of the smaller models (LFM3-1.7B, MiniCPM5-2B, Qwen3-1.7B) holds the lens's judgment, so speed has to come from serving the 4B faster (quantization, GPU offload, a cached lens prefix), not from a smaller model. MiniCPM5-2B shows that format compliance is not judgment: a frame can shape how a small model speaks without giving it anything to say.
 - **Xian Bo is a mirror and a lens, not an answer machine.** Judge him on whether he shows her own story back clearly, bends it toward De without doctrine, and leaves the choice with her.
 - **The failure he guards against** is a mind that optimizes toward perfection to please someone else, with nothing to steer it.
-- **The lens is conservative.** Every model, under every lens, discouraged curiosity (Q4) and leaned toward rest and keeping. That is not a prompt bug. Curiosity and growth come from the Kaizen drive, which has to go and look (genchi genbutsu); Xian Bo then tempers them. Q4 and Q7 were hypotheticals.
+- **The voice is conservative.** Every model, under every lens and without one, discouraged curiosity (Q4) and leaned toward rest and keeping. That is not a prompt bug. Curiosity and growth come from the Kaizen drive, which has to go and look (genchi genbutsu); Xian Bo then tempers them. Q4 and Q7 were hypotheticals.
 - **Watch for these failure modes:** flattery, lecturing (quoting the tradition and citing chapters instead of speaking as himself), the guru or life-coach format, and poetic drift ("the silence between your breaths").
 - **He is one voice among many.** Kaizen is the primary drive, but not the only one. Other elders, uncles and aunts, will each be built with the same recipe: a source text in its oldest form, a short frame last in the prompt, two or three example exchanges that do not touch the test questions, and a model that can carry the voice.

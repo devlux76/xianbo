@@ -13,7 +13,7 @@ PROFILES={
 SAMPLING=next(v for k,v in PROFILES.items() if MODEL.lower().startswith(k))
 CLOSE=sys.argv[6] if len(sys.argv)>6 else 'Answer wisely, answer briefly.'
 SHOTS=json.load(open(sys.argv[7],encoding='utf-8')) if len(sys.argv)>7 else []
-sysmsg=open(LENS,encoding='utf-8').read().rstrip('\n')+'\n\n'+CLOSE
+sysmsg='\n\n'.join(x for x in (open(LENS,encoding='utf-8').read().strip('\n'),CLOSE) if x)
 # Mirai speaks; the lens answers. Q7 is a retrospective story with a trap in it.
 Q=[
  "I'm Mirai. All day I've only felt my body (heat, fatigue, load) and acknowledged it. I rest and watch, and do nothing else. I tell myself this is wu wei. Is it?",
