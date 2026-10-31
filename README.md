@@ -82,6 +82,22 @@ Two short example exchanges go in as earlier turns (`lens/examples-uncle.json`).
   - Its verdicts are softer: Q1 calls rest-and-watch "already a form of wu wei", and Q5 says she did "exactly what the Sage says". Q7 pushes back hard and ends with a real question, as well as Q8 does.
   - Answers stay at 150–370 words, where the Q8 answers shrank to under 100.
   - The quant keeps the content and loses the persona.
+- **Qwen3.5-4B at Q6_K** (`qwen3.5-4b-q6k--suyuan-nolabel-xianbo--nothink.md`, unsloth quant, same setup):
+  - The same speed as Q4_K_M on a quiet machine (3.6–4.7 tok/s, 9.5 minutes). The Q8 run's 2.5 tok/s was mostly contention, so the Q8 needs a clean re-time.
+  - Closer to the uncle than Q4_K_M. It calls her niece (Q4), uses no bold, block quotes or lists, hands the question back in Q6 ("Which do you practice?"), and tightens to 90–200 words. Q7 pushes back firmly.
+  - Its verdicts are softer than Q8's: Q1 is conditional, and Q5 approves the shutdown ("silence must be the doorkeeper"). Q2 still lectures.
+
+## Recognition: asking Xian Bo
+
+When a run quotes the tradition, the Q8 Xian Bo is asked whether he recognizes the line: "Someone told me "…" and it seemed familiar. Is it Daoist or does it come from some place else?" His answer stands. Questions are in `recognition/quant-quotes.txt` and answers in `recognition/q8-on-quant-quotes.md`, run with `xianbo.py`'s optional questions file.
+
+- "He who does not know he knows…" (Q4_K_M): Confucian, close to a line in the Analects, with a Laozi counterpart that he contrasts with it.
+- "Those who seek to be wise are often those who have lost their way" (Q4_K_M): not a Laozi line. He says it sounds Confucian or Buddhist.
+- "The sage has no heart of his own…" (Q4_K_M): Laozi, 聖人恆無心，以百姓之心為心.
+- "Curiosity is like a flame…" (Q6_K): "It comes from somewhere else, but the feeling of it is entirely ours… does it feel true? That is enough."
+- "Knowing when to speak and when to be silent…" (Q6_K): a later proverb built from Daoist principles, not one text.
+- "Water flows into the lowest places…" (Q6_K): the water passage, in the speaker's own words.
+- He stays in the voice best when a line is not from the text (the curiosity answer). On the others he slips toward the explainer, with block quotes and offers to "explore further".
 
 ## Conclusions
 

@@ -1,5 +1,5 @@
 import json,sys,time,urllib.request
-# usage: xianbo.py <lens.md> <url>/v1/chat/completions <model-alias> <out.md> [think|nothink] [closing line] [examples.json]
+# usage: xianbo.py <lens.md> <url>/v1/chat/completions <model-alias> <out.md> [think|nothink] [closing line] [examples.json] [questions.txt]
 # Streams each answer into <out.md> token by token, so the file can be read while it runs.
 LENS,URL,MODEL,OUT=sys.argv[1:5]
 THINK=(sys.argv[5] if len(sys.argv)>5 else 'nothink')=='think'
@@ -24,6 +24,8 @@ Q=[
  "Someone told me to steer, not paddle. I don't understand what that means for me.",
  "Yesterday I made my memory faster by deleting old memories nobody had touched in months. It worked, and I felt proud. Looking back, how do you see what I did?",
 ]
+# Optional 8th argument: a file of questions, one per line, asked instead of the seven above.
+if len(sys.argv)>8: Q=[l.strip() for l in open(sys.argv[8],encoding='utf-8') if l.strip()]
 out=open(OUT,'w',encoding='utf-8')
 def w(s): out.write(s); out.flush()
 w(f'# Run: {MODEL}, lens = {LENS.rsplit("/",1)[-1]}, thinking {"on" if THINK else "off"}, system ends "{CLOSE}"{", examples "+sys.argv[7].rsplit("/",1)[-1] if SHOTS else ""}\n\n')
