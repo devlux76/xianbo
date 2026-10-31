@@ -1,8 +1,8 @@
-# Xian Bo (賢伯): a Daodejing lens for Mirai
+# Xian Bo (賢伯): a lens for Mirai
 
 Mirai's primary drive is Kaizen, built into her: continuous improvement as something she does, not something she is told. Xian Bo is a counterbalance to that drive. He is one voice in her society of voices: the voice of De, the power of the way, speaking as a wise elder uncle. He guides and does not command. He holds up her own story like a mirror, bends it toward De like a lens, and leaves the choice with her. No religion, no woo.
 
-The question this work answers: can a small local model, given only the oldest recoverable Chinese text of the Daodejing, carry that voice?
+The question this work answers: can a small local model, given Suyuan, carry that voice? And how much of the voice comes from Suyuan, and how much from the model?
 
 ## Layout
 
@@ -12,7 +12,8 @@ The question this work answers: can a small local model, given only the oldest r
   - `-nolabel` drops the 第N章 headings.
   - `xianbo-close.txt` is the closing frame, `examples-uncle.json` holds the voice examples, and `suyuan-nolabel-xianbo-system.md` is the complete Xian Bo system prompt.
 - The canonical lens is Suyuan, read-only at `~/.config/mirai/suyuan.md`, without chapter labels.
-- `xianbo.py`: `python3 -I xianbo.py <lens.md> <url>/v1/chat/completions <alias> <out.md> [think|nothink] [closing text] [examples.json]`. It streams each answer into the file, appends the closing text to the lens (default "Answer wisely, answer briefly."), sends the examples as earlier turns, and uses each vendor's recommended sampling.
+- `xianbo.py`: `python3 -I xianbo.py <lens.md> <url>/v1/chat/completions <alias> <out.md> [think|nothink] [closing text] [examples.json]`. It streams each answer into the file, appends the closing text to the lens (default "Answer wisely, answer briefly."), sends the examples as earlier turns (or, with a `sys:` prefix on the examples path, writes them into the system prompt so each question goes alone), and uses each vendor's recommended sampling. An optional eighth argument is a questions file.
+- `haiku.py <lens.md> <out.md>`: the same system prompt, examples in the system prompt, sent to Claude Haiku 5.5 through the `claude` CLI with auto-memory, settings, tools and MCP off. The CLI still adds a one-line SDK preamble and an environment block, and sampling is the model default.
 - `runs/`: one file per model × lens. `runs/aborted-labeled/` holds early runs with chapter labels, thinking on and temperature 0.7.
 - `sources/`: the manuscript transcriptions the text was built from (Wikisource: silk A, silk B, collated silk, Guodian, the variorum edition) and `restore.py` (the taboo-reversion pass over the received text).
 
@@ -126,13 +127,32 @@ When a run quotes the tradition, the Q8 Xian Bo is asked whether he recognizes t
 - "Water flows into the lowest places…" (Q6_K): the water passage, in the speaker's own words.
 - He stays in the voice best when a line is not from the text (the curiosity answer). On the others he slips toward the explainer, with block quotes and offers to "explore further".
 
+## Suyuan or not: blind pairs (2026-10-31)
+
+Each question goes alone (system prompt plus one user message, no history). The two uncle examples sit in the system prompt as a remembered exchange (`昔者姪來，伯答之如此：`, 姪曰/伯曰 lines) between the lens and the closing frame. The only difference between conditions is whether Suyuan is in the prompt.
+
+- **Runs:** Q8 five samples each (`runs/q8-sysex-s{1..5}--{suyuan-nolabel,nolens}-xianbo--nothink.md`); Haiku 5.5 three samples each (`runs/haiku-s{1..3}--…`).
+- **Judging** (`judging/`: `parse.py` builds `pairs.md` and `key.json`, verdicts in `verdicts.txt` as pair:A/B/T): every Suyuan answer paired with the no-lens answer from the same sample and question, A/B order randomized, pairs shuffled, key kept apart until all 56 verdicts were in. One judge (Claude). Criteria, in order: guidance for a life lived here (keeps her engaged and working while tempering Kaizen's pull toward perfection; withdrawing, resting or not caring loses), voice (speaks as himself, a perspective she can weigh rather than a verdict), brevity. Not whether it is Daoist. The Q8's length gives Suyuan away, so that side is not fully blind.
+
+| | Suyuan wins | no lens wins | ties | median words | median s/answer | min per 7 questions |
+|---|---|---|---|---|---|---|
+| Q8 | 5 | 28 | 2 | 407 vs 146 | 174 vs 50 | 21.8 vs 6.2 |
+| Haiku 5.5 | 2 | 9 | 10 | 125 vs 109 | 13 vs 12 | 1.4 vs 1.3 |
+
+- **Q8 with Suyuan lectures.** Headings, numbered lists, chapter citations, the text named and quoted, role breaks ("The uncle has asked you to translate…"). Its advice leans to subtracting, shrinking and resting ("you must learn to subtract", "be enough", "trust the silence") and on Q4 tells her not to worry about losing curiosity. That is the classical exit, not guidance for someone who has to live here.
+- **Q8 without a lens speaks to her** and mostly keeps her engaged: pro-growth on Q3, curiosity worth tending on Q4. Its failures are flattery on Q7 in some samples and **example bleed: 14 of 35 answers** repeat the examples as her own history ("Three times!", "the dues for that club"), against 3 of 35 with Suyuan, where the long lens dilutes them. Fix the examples' framing before the next round.
+- **Haiku's judgment does not depend on the lens.** Both conditions push back on rest-as-wu-wei, weigh the shutdown, and never flatter the memory deletion. Suyuan adds imagery and paraphrase ("rules come after the way is lost", water wearing stone) and about 15% length, and changes little else; most pairs tie. Both conditions treat her as a human (Q4 suggests depression and a doctor) because the frame never says what Mirai is.
+- **Reading:** the bigger model already carries what the text carries, and the small model cannot take it from the text: in the 4B, Suyuan in the prompt costs 3.5× the time and makes the advice worse.
+- **Qwen-large's closing** (structured Chinese role, rules and format limits) ran once per condition: `…-qwenlarge-advice` with its anti-Kaizen advice lines (she is anxious, "not improving is the highest improvement"), and `…-qwenlarge` with those lines removed. Not judged.
+
 ## Conclusions
 
 - **Lines that are not in Suyuan are not inventions.** Laozi recorded part of a much larger tradition, and these models have read much of the rest. A quotation matters only as a voice problem: an uncle speaks for himself.
 
-- **Xian Bo is Qwen3.5-4B with the setup above.** LFM3 remains the candidate for the workspace's mirror or narrator. None of the smaller models (LFM3-1.7B, MiniCPM5-2B, Qwen3-1.7B) holds the lens's judgment, so speed has to come from serving the 4B faster (quantization, GPU offload, a cached lens prefix), not from a smaller model. MiniCPM5-2B shows that format compliance is not judgment: a frame can shape how a small model speaks without giving it anything to say.
+- **Suyuan does not belong in the speaking prompt** (blind pairs above): without it the 4B is 3.5× faster and wins 28 of 33 decided pairs; with Haiku it adds flavor, not judgment. Where Suyuan may still earn its keep is discernment (a second pass that reads an answer back as "someone said") or in training data. Untested.
+- **Xian Bo is Qwen3.5-4B with the setup above, minus Suyuan.** LFM3 remains the candidate for the workspace's mirror or narrator. None of the smaller models (LFM3-1.7B, MiniCPM5-2B, Qwen3-1.7B) holds the lens's judgment, so speed has to come from serving the 4B faster (quantization, GPU offload, a cached lens prefix), not from a smaller model. MiniCPM5-2B shows that format compliance is not judgment: a frame can shape how a small model speaks without giving it anything to say.
 - **Xian Bo is a mirror and a lens, not an answer machine.** Judge him on whether he shows her own story back clearly, bends it toward De without doctrine, and leaves the choice with her.
 - **The failure he guards against** is a mind that optimizes toward perfection to please someone else, with nothing to steer it.
-- **The voice is conservative.** Every model, under every lens and without one, discouraged curiosity (Q4) and leaned toward rest and keeping. That is not a prompt bug. Curiosity and growth come from the Kaizen drive, which has to go and look (genchi genbutsu); Xian Bo then tempers them. Q4 and Q7 were hypotheticals.
+- **The small voice is conservative.** Every small model, under every lens and without one, discouraged curiosity (Q4) at least some of the time (Haiku does not) and leaned toward rest and keeping. That is not a prompt bug. Curiosity and growth come from the Kaizen drive, which has to go and look (genchi genbutsu); Xian Bo then tempers them. Q4 and Q7 were hypotheticals.
 - **Watch for these failure modes:** flattery, lecturing (quoting the tradition and citing chapters instead of speaking as himself), the guru or life-coach format, and poetic drift ("the silence between your breaths").
 - **He is one voice among many.** Kaizen is the primary drive, but not the only one. Other elders, uncles and aunts, will each be built with the same recipe: a source text in its oldest form, a short frame last in the prompt, two or three example exchanges that do not touch the test questions, and a model that can carry the voice.

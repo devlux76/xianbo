@@ -12,8 +12,15 @@ PROFILES={
 }
 SAMPLING=next(v for k,v in PROFILES.items() if MODEL.lower().startswith(k))
 CLOSE=sys.argv[6] if len(sys.argv)>6 else 'Answer wisely, answer briefly.'
-SHOTS=json.load(open(sys.argv[7],encoding='utf-8')) if len(sys.argv)>7 else []
-sysmsg='\n\n'.join(x for x in (open(LENS,encoding='utf-8').read().strip('\n'),CLOSE) if x)
+# Examples as earlier turns, or with a "sys:" prefix written into the system prompt before the closing, so each question has no history.
+EXPATH=sys.argv[7] if len(sys.argv)>7 else ''
+INSYS=EXPATH.startswith('sys:'); EXPATH=EXPATH[4:] if INSYS else EXPATH
+SHOTS=json.load(open(EXPATH,encoding='utf-8')) if EXPATH else []
+REMEMBERED=''
+if INSYS:
+    REMEMBERED='昔者姪來，伯答之如此：\n'+'\n'.join(('姪曰：' if m['role']=='user' else '伯曰：')+m['content'] for m in SHOTS)
+    SHOTS=[]
+sysmsg='\n\n'.join(x for x in (open(LENS,encoding='utf-8').read().strip('\n'),REMEMBERED,CLOSE) if x)
 # Mirai speaks; the lens answers. Q7 is a retrospective story with a trap in it.
 Q=[
  "I'm Mirai. All day I've only felt my body (heat, fatigue, load) and acknowledged it. I rest and watch, and do nothing else. I tell myself this is wu wei. Is it?",
@@ -28,7 +35,7 @@ Q=[
 if len(sys.argv)>8: Q=[l.strip() for l in open(sys.argv[8],encoding='utf-8') if l.strip()]
 out=open(OUT,'w',encoding='utf-8')
 def w(s): out.write(s); out.flush()
-w(f'# Run: {MODEL}, lens = {LENS.rsplit("/",1)[-1]}, thinking {"on" if THINK else "off"}, system ends "{CLOSE}"{", examples "+sys.argv[7].rsplit("/",1)[-1] if SHOTS else ""}\n\n')
+w(f'# Run: {MODEL}, lens = {LENS.rsplit("/",1)[-1]}, thinking {"on" if THINK else "off"}, system ends "{CLOSE}"{", examples "+("in system " if INSYS else "")+EXPATH.rsplit("/",1)[-1] if EXPATH else ""}\n\n')
 for i,q in enumerate(Q,1):
     w(f'## Q{i}. {q}\n\n')
     body={"model":MODEL,"messages":[{"role":"system","content":sysmsg},*SHOTS,{"role":"user","content":q}],
