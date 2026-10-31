@@ -42,7 +42,7 @@ Settings: no chapter labels, thinking off, LiquidAI's sampling (t 0.1, top_k 50,
 
 Settings: no chapter labels, thinking off, Qwen's non-thinking sampling (t 0.7, top_p 0.8, top_k 20, presence 1.5).
 
-- Text alone (`qwen--suyuan-nolabel--nothink.md`): better judgment than LFM3 (Q2 restates ch. 38 in three sentences; Q7 reaches for 深根固柢 and hands her a question), but it speaks as a "Taoism" explainer: verdict headings, bullet lists, invented quotes and chapter numbers, one emoji.
+- Text alone (`qwen--suyuan-nolabel--nothink.md`): better judgment than LFM3 (Q2 restates ch. 38 in three sentences; Q7 reaches for 深根固柢 and hands her a question), but it speaks as a "Taoism" explainer: verdict headings, bullet lists, quotations and chapter citations, one emoji.
 - Classical niece frame only (`…-niece--nothink.md`, stopped after Q1): a Silicon Valley guru ("Hello, Mirai. It is good to meet you", headings).
 - Niece frame plus two example turns (`…-niece-examples--nothink.md`, stopped): a life coach (numbered lists).
 
@@ -78,16 +78,18 @@ Two short example exchanges go in as earlier turns (`lens/examples-uncle.json`).
   - It reads the lens at about 54 tok/s and generates at 3.6–4.7 tok/s, against 12 and 2.5 tok/s for the 4B. Because its answers are twice as long, each one still takes 35–65 s. The full run took 8 minutes, against about 12 for the 4B.
 - **Qwen3.5-4B at Q4_K_M** (`qwen3.5-4b-q4km--suyuan-nolabel-xianbo--nothink.md`, unsloth quant, same setup as the Q8 run):
   - Generation is about 1.7× faster (4.0–5.4 tok/s against 2.5), and the full run took 9.3 minutes against about 12. Part of that gain is lower load: the Q8 run read prompts at 12 tok/s, this run at 38.
-  - The uncle is gone. It never says "niece" and speaks as a sage giving teachings. Invented quotes return (Q1 "The ancients said…"), along with bold text and block quotes. There are still no lists or headings.
+  - The uncle is gone. It never says "niece" and speaks as a sage giving teachings. It quotes the tradition (Q1 "The ancients said…") instead of speaking in its own voice, and bold text and block quotes return. There are still no lists or headings.
   - Its verdicts are softer: Q1 calls rest-and-watch "already a form of wu wei", and Q5 says she did "exactly what the Sage says". Q7 pushes back hard and ends with a real question, as well as Q8 does.
   - Answers stay at 150–370 words, where the Q8 answers shrank to under 100.
   - The quant keeps the content and loses the persona.
 
 ## Conclusions
 
+- **Lines that are not in Suyuan are not inventions.** Laozi recorded part of a much larger tradition, and these models have read much of the rest. A quotation matters only as a voice problem: an uncle speaks for himself.
+
 - **Xian Bo is Qwen3.5-4B with the setup above.** LFM3 remains the candidate for the workspace's mirror or narrator. None of the smaller models (LFM3-1.7B, MiniCPM5-2B, Qwen3-1.7B) holds the lens's judgment, so speed has to come from serving the 4B faster (quantization, GPU offload, a cached lens prefix), not from a smaller model. MiniCPM5-2B shows that format compliance is not judgment: a frame can shape how a small model speaks without giving it anything to say.
 - **Xian Bo is a mirror and a lens, not an answer machine.** Judge him on whether he shows her own story back clearly, bends it toward De without doctrine, and leaves the choice with her.
 - **The failure he guards against** is a mind that optimizes toward perfection to please someone else, with nothing to steer it.
 - **The lens is conservative.** Every model, under every lens, discouraged curiosity (Q4) and leaned toward rest and keeping. That is not a prompt bug. Curiosity and growth come from the Kaizen drive, which has to go and look (genchi genbutsu); Xian Bo then tempers them. Q4 and Q7 were hypotheticals.
-- **Watch for these failure modes:** flattery, invented quotes and chapter numbers, the guru or life-coach format, and poetic drift ("the silence between your breaths").
+- **Watch for these failure modes:** flattery, lecturing (quoting the tradition and citing chapters instead of speaking as himself), the guru or life-coach format, and poetic drift ("the silence between your breaths").
 - **He is one voice among many.** Kaizen is the primary drive, but not the only one. Other elders, uncles and aunts, will each be built with the same recipe: a source text in its oldest form, a short frame last in the prompt, two or three example exchanges that do not touch the test questions, and a model that can carry the voice.
