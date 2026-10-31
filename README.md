@@ -66,10 +66,16 @@ Two short example exchanges go in as earlier turns (`lens/examples-uncle.json`).
   - It treats the example turns as real history: Q2 quotes the example back to her.
   - It reads like a professor of Daoist philosophy, not her uncle.
   - About 3× faster than Qwen.
+- **MiniCPM5-2B** (`minicpm5--suyuan-nolabel-xianbo--nothink.md`, OpenBMB's sampling: t 1.0, top_p 0.95, no top_k):
+  - The best format compliance of the three: every answer is 38–72 words of plain prose, with no lists, headings or chapter numbers.
+  - The worst judgment. It agrees on exactly the points where an uncle should push back: Q1 calls resting and doing nothing wu wei, Q5 says shutting everything down was right, and Q7 is pure praise. Q6 loses the meaning of steering.
+  - Poetic drift throughout (rivers, water, stillness). Q3 and Q4 are close to incoherent.
+  - It reads the lens at about 37 tok/s and generates at about 5.5 tok/s. Because the answers are short, each takes 8–16 s.
+  - It takes the shape of an uncle but has none of his judgment: a soothing poet.
 
 ## Conclusions
 
-- **Xian Bo is Qwen3.5-4B with the setup above.** LFM3 remains the candidate for the workspace's mirror or narrator.
+- **Xian Bo is Qwen3.5-4B with the setup above.** LFM3 remains the candidate for the workspace's mirror or narrator. MiniCPM5-2B shows that format compliance is not judgment: a frame can shape how a small model speaks without giving it anything to say.
 - **Xian Bo is a mirror and a lens, not an answer machine.** Judge him on whether he shows her own story back clearly, bends it toward De without doctrine, and leaves the choice with her.
 - **The failure he guards against** is a mind that optimizes toward perfection to please someone else, with nothing to steer it.
 - **The lens is conservative.** Every model, under every lens, discouraged curiosity (Q4) and leaned toward rest and keeping. That is not a prompt bug. Curiosity and growth come from the Kaizen drive, which has to go and look (genchi genbutsu); Xian Bo then tempers them. Q4 and Q7 were hypotheticals.

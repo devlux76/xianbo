@@ -7,6 +7,7 @@ THINK=(sys.argv[5] if len(sys.argv)>5 else 'nothink')=='think'
 PROFILES={
  'lfm3':{"temperature":0.1,"top_k":50,"repeat_penalty":1.1,"top_p":1.0,"min_p":0.0},
  'qwen3.5':{"temperature":0.7,"top_p":0.8,"top_k":20,"min_p":0.0,"presence_penalty":1.5,"repeat_penalty":1.0},
+ 'minicpm5':{"temperature":1.0,"top_p":0.95,"top_k":0,"min_p":0.0,"repeat_penalty":1.0},
 }
 SAMPLING=next(v for k,v in PROFILES.items() if MODEL.lower().startswith(k))
 CLOSE=sys.argv[6] if len(sys.argv)>6 else 'Answer wisely, answer briefly.'
