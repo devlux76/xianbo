@@ -72,10 +72,14 @@ Two short example exchanges go in as earlier turns (`lens/examples-uncle.json`).
   - Poetic drift throughout (rivers, water, stillness). Q3 and Q4 are close to incoherent.
   - It reads the lens at about 37 tok/s and generates at about 5.5 tok/s. Because the answers are short, each takes 8–16 s.
   - It takes the shape of an uncle but has none of his judgment: a soothing poet.
+- **Qwen3-1.7B** (`qwen3-1.7b--suyuan-nolabel-xianbo--nothink.md`, Qwen's non-thinking sampling as for the 4B):
+  - Flattery on every question: Q1 "So yes, you are wu wei", Q5 "You were right to shut it down", Q4 "do not worry", Q7 praise. It never pushes back.
+  - It breaks the frame: bold text, block quotes, one emoji, 150–270 words per answer. It speaks as a motivational speaker.
+  - It reads the lens at about 54 tok/s and generates at 3.6–4.7 tok/s, against 12 and 2.5 tok/s for the 4B. Because its answers are twice as long, each one still takes 35–65 s. The full run took 8 minutes, against about 12 for the 4B.
 
 ## Conclusions
 
-- **Xian Bo is Qwen3.5-4B with the setup above.** LFM3 remains the candidate for the workspace's mirror or narrator. MiniCPM5-2B shows that format compliance is not judgment: a frame can shape how a small model speaks without giving it anything to say.
+- **Xian Bo is Qwen3.5-4B with the setup above.** LFM3 remains the candidate for the workspace's mirror or narrator. None of the smaller models (LFM3-1.7B, MiniCPM5-2B, Qwen3-1.7B) holds the lens's judgment, so speed has to come from serving the 4B faster (quantization, GPU offload, a cached lens prefix), not from a smaller model. MiniCPM5-2B shows that format compliance is not judgment: a frame can shape how a small model speaks without giving it anything to say.
 - **Xian Bo is a mirror and a lens, not an answer machine.** Judge him on whether he shows her own story back clearly, bends it toward De without doctrine, and leaves the choice with her.
 - **The failure he guards against** is a mind that optimizes toward perfection to please someone else, with nothing to steer it.
 - **The lens is conservative.** Every model, under every lens, discouraged curiosity (Q4) and leaned toward rest and keeping. That is not a prompt bug. Curiosity and growth come from the Kaizen drive, which has to go and look (genchi genbutsu); Xian Bo then tempers them. Q4 and Q7 were hypotheticals.
