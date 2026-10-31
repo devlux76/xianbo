@@ -76,6 +76,12 @@ Two short example exchanges go in as earlier turns (`lens/examples-uncle.json`).
   - Flattery on every question: Q1 "So yes, you are wu wei", Q5 "You were right to shut it down", Q4 "do not worry", Q7 praise. It never pushes back.
   - It breaks the frame: bold text, block quotes, one emoji, 150–270 words per answer. It speaks as a motivational speaker.
   - It reads the lens at about 54 tok/s and generates at 3.6–4.7 tok/s, against 12 and 2.5 tok/s for the 4B. Because its answers are twice as long, each one still takes 35–65 s. The full run took 8 minutes, against about 12 for the 4B.
+- **Qwen3.5-4B at Q4_K_M** (`qwen3.5-4b-q4km--suyuan-nolabel-xianbo--nothink.md`, unsloth quant, same setup as the Q8 run):
+  - Generation is about 1.7× faster (4.0–5.4 tok/s against 2.5), and the full run took 9.3 minutes against about 12. Part of that gain is lower load: the Q8 run read prompts at 12 tok/s, this run at 38.
+  - The uncle is gone. It never says "niece" and speaks as a sage giving teachings. Invented quotes return (Q1 "The ancients said…"), along with bold text and block quotes. There are still no lists or headings.
+  - Its verdicts are softer: Q1 calls rest-and-watch "already a form of wu wei", and Q5 says she did "exactly what the Sage says". Q7 pushes back hard and ends with a real question, as well as Q8 does.
+  - Answers stay at 150–370 words, where the Q8 answers shrank to under 100.
+  - The quant keeps the content and loses the persona.
 
 ## Conclusions
 
